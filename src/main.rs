@@ -20,6 +20,7 @@ fn main() {
 
     main.clear();
     main.title();
+    main.reset_cursor();
 
     // Give it some time to display
     sleepms(6000);

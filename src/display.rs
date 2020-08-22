@@ -70,10 +70,15 @@ impl Display {
         write!(screen, "{}{}╚═╝  ╚═╝ ╚═════╝ ╚══════╝   ╚═╝{}╚═╝{}╚══════╝╚═════╝\n",
                cursor::Goto(xp, yp+5), rd, bk, bl).unwrap();
 
-        // Set the text to default color, and the cursor to the start position
-        write!(screen, "{}{}", cursor::Goto(1, 1), color::Fg(color::Reset)).unwrap();
-
         // Flush the output (display)
+        screen.flush().unwrap();
+    }
+
+    pub fn reset_cursor(&mut self) {
+        // Move cursor to 1,1 and reset the foreground color to default
+        let screen = &mut (*self).screen;
+
+        write!(screen, "{}{}", cursor::Goto(1, 1), color::Fg(color::Reset)).unwrap();
         screen.flush().unwrap();
     }
 
