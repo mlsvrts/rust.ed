@@ -8,20 +8,18 @@
 mod display;
 use display::Display;
 
-// Convient function for sleeping millis
-fn sleepms(ms: u64) {
-    std::thread::sleep(std::time::Duration::from_millis(ms));
-}
-
+mod input;
 
 fn main() {
 
+    // Initialize a new window
     let mut main = Display::new();
 
+    // Clear it and display the title
     main.clear();
     main.title();
     main.reset_cursor();
 
-    // Give it some time to display
-    sleepms(6000);
+    // Start capturing inputs
+    input::capture(&mut main);
 }

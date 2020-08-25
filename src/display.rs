@@ -18,6 +18,14 @@ impl Display {
         return Display { screen: AlternateScreen::from(stdout()) };
     }
 
+    pub fn flush(&mut self) {
+        (*self).screen.flush().unwrap();
+    }
+
+    pub fn write(&mut self) {
+        write!((*self).screen, "BEANS!").unwrap();
+    }
+
     pub fn clear(&mut self) {
         // Clear the alternate screen
         let screen = &mut (*self).screen;
