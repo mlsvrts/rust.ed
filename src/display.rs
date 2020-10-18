@@ -4,26 +4,31 @@
 extern crate termion;
 
 use termion::screen::AlternateScreen;
+use termion::raw::{IntoRawMode, RawTerminal};
 use termion::{color, cursor};
 
 use std::io::{Write, Stdout, stdout};
 
 pub struct Display {
-    screen: AlternateScreen<Stdout>,
+    screen: RawTerminal<AlternateScreen<Stdout>>,
 }
 
 impl Display {
     pub fn new() -> Display {
         // Builds a new alternate screen into a Display object
-        return Display { screen: AlternateScreen::from(stdout()) };
+        return Display { screen: AlternateScreen::from(stdout()).into_raw_mode().unwrap() };
     }
 
     pub fn flush(&mut self) {
         (*self).screen.flush().unwrap();
     }
 
-    pub fn write(&mut self) {
-        write!((*self).screen, "BEANS!").unwrap();
+    pub fn write(&mut self, string: &str) {
+        write!((*self).screen, "{}", string).unwrap();
+    }
+
+    pub fn write_char(&mut self, c: char) {
+        write!((*self).screen, "{}", c).unwrap();
     }
 
     pub fn clear(&mut self) {

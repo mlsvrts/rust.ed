@@ -5,8 +5,6 @@ extern crate termion;
 
 use termion::event::{Key, Event};
 use termion::input::TermRead;
-// use termion::input::MouseTerminal;
-// use termion::raw::IntoRawMode;
 
 use crate::display::Display;
 
@@ -22,9 +20,10 @@ pub fn capture(disp: &mut Display) {
             Event::Key(Key::Char('q')) => {
                 break
             },
-            _ => {
-                disp.write();
+            Event::Key(Key::Char(c)) => {
+                disp.write_char(c);
             },
+            _ => { }
         }
 
         disp.flush();
