@@ -28,7 +28,18 @@ impl Display {
     }
 
     pub fn write_char(&mut self, c: char) {
-        write!((*self).screen, "{}", c).unwrap();
+        // Insert a blank character and overwrite it
+        write!((*self).screen, "\x1B[1@{}", c).unwrap();
+    }
+
+    pub fn move_n(&mut self, d: char, n: u16) {
+        match d {
+            'u' => { write!((*self).screen, "{}", cursor::Up(n)) },
+            'd' => { write!((*self).screen, "{}", cursor::Down(n)) },
+            'l' => { write!((*self).screen, "{}", cursor::Left(n)) },
+            'r' => { write!((*self).screen, "{}", cursor::Right(n)) },
+            _ => { return; }
+        }.unwrap();
     }
 
     pub fn clear(&mut self) {
