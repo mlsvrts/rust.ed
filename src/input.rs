@@ -20,15 +20,15 @@ pub fn capture(disp: &mut Display) {
         match evt {
             Event::Key(Key::Char('\n')) => {
                 // Handle enter/newlines
-                disp.write("\x0D\x0A");  // \r\n
+                disp.newline();  // \r\n
             },
             Event::Key(Key::Char(c)) => {
                 // Just write the character
                 disp.write_char(c);
             },
             Event::Key(Key::Backspace) => {
-                // Move back one char, delete on char
-                disp.write("\x08\x1B[1P");
+                // Move back one char, delete one char
+                disp.backspace();
             },
             Event::Key(Key::Up) => {
                 disp.move_n('u', 1);

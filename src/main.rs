@@ -18,6 +18,7 @@ fn main() {
     // Clear it and display the title
     main.clear();
     main.title();
+    main.border();
     main.reset_cursor();
 
     // Start capturing inputs
