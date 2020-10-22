@@ -5,21 +5,19 @@
 //                               Rust.Ed is a lightweight, portable, rust-based text editor.
 // ________________________________________________________________________________________________________________________ //
 
-mod display;
-use display::Display;
+mod window;
+use window::display;
 
 mod input;
 
 fn main() {
 
     // Initialize a new window
-    let mut main = Display::new();
+    let mut main = display::Screen::new();
 
     // Clear it and display the title
     main.clear();
-    main.title();
-    main.border();
-    main.reset_cursor();
+    display::title(&mut main);
 
     // Start capturing inputs
     input::capture(&mut main);
