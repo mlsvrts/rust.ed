@@ -8,25 +8,24 @@ pub mod display {
 
     use termion::screen::AlternateScreen;
     use termion::raw::{IntoRawMode, RawTerminal};
-    use termion::cursor::{DetectCursorPos};
     use termion::{color, cursor};
 
     use std::io::{Write, Stdout, stdout};
+    use chrono::Local;
 
     /// Screen structure for output pipe
     pub struct Screen {
         terminal: RawTerminal<AlternateScreen<Stdout>>,
-    }
-
-    /// Cursor structure that handles user movement
-    pub struct Cursor {
-        screen: Screen,
+        title: String,
     }
 
     impl Screen {
         /// Create a new screen object
         pub fn new() -> Screen {
-            return Screen { terminal: AlternateScreen::from(stdout()).into_raw_mode().unwrap() };
+            return Screen {
+                terminal: AlternateScreen::from(stdout()).into_raw_mode().unwrap(),
+                title: String::from("Rust.Ed")
+            };
         }
 
         /// Flush output to screen
@@ -72,8 +71,8 @@ pub mod display {
         let bk = color::Fg(color::Black);
 
         // Get the start position for line horizontals
-        let xp = mids.0 - 25;
-        let yp = mids.1 - 3;
+        let xp = mids.0 - 26;
+        let yp = mids.1 - 2;
 
         // Write the title to the screen
         let title = format!(
@@ -94,5 +93,55 @@ pub mod display {
 
         // Flush the output (display)
         screen.reset();
+    }
+
+    /// Draw a border around the screen
+    pub fn border(screen: &mut Screen) {
+        // Basic details
+        let green = color::Fg(color::Green);
+        let blue = color::Fg(color::Blue);
+        let size = screen.size();
+
+        // Move over 9 char for every 100 chars of screen size
+        let shift = (9 * (size.0 / 100)) as u16;
+
+        // Check for minimum size
+        if size.0 < 25 || size.1 < 25 {
+            println!("{} {}", size.0, size.1);
+            return;
+        }
+
+        // Set color
+        write!(screen.terminal, "{}", green).unwrap();
+
+        let title_len = screen.title.len() as u16;
+        // Top
+        write!(screen.terminal, "{}┌{}│ {}{}{} │{}┐",
+            cursor::Goto(1, 1),
+            "─".repeat(shift as usize),
+            blue, screen.title, green,
+            "─".repeat((size.0 - shift - title_len - 6) as usize)
+        ).unwrap();
+
+        // Left, Right
+        for i in 2..size.1 {
+            write!(screen.terminal, "{}│", cursor::Goto(1, i)).unwrap();
+            write!(screen.terminal, "{}│", cursor::Goto(size.0, i)).unwrap();
+        }
+
+        // Bottom
+        let time = Local::now().format("%H:%M:%S");
+        let len_t = 8;
+
+        write!(screen.terminal, "{}└{}│ {}{}{} │{}┘",
+            cursor::Goto(1, size.1),
+            "─".repeat((size.0 - shift - len_t) as usize),
+            blue, time, green,
+            "─".repeat((shift - 6) as usize)
+        ).unwrap();
+
+        // Reset
+        screen.reset();
+
     }
 }

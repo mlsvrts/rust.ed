@@ -18,6 +18,7 @@ fn main() {
     // Clear it and display the title
     main.clear();
     display::title(&mut main);
+    display::border(&mut main);
 
     // Start capturing inputs
     input::capture(&mut main);
