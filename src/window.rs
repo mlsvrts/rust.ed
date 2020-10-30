@@ -17,6 +17,7 @@ pub mod display {
     pub struct Screen {
         terminal: RawTerminal<AlternateScreen<Stdout>>,
         title: String,
+        pub alive: bool,
     }
 
     impl Screen {
@@ -24,7 +25,8 @@ pub mod display {
         pub fn new() -> Screen {
             return Screen {
                 terminal: AlternateScreen::from(stdout()).into_raw_mode().unwrap(),
-                title: String::from("Rust.Ed")
+                title: String::from("Rust.Ed"),
+                alive: true
             };
         }
 

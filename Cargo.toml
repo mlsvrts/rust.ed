@@ -9,3 +9,9 @@ edition = "2018"
 [dependencies]
 termion = "1.5.5"
 chrono = "0.4"
+
+[profile.dev]
+opt-level = 0
+
+[profile.release]
+opt-level = 3
