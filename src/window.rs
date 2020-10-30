@@ -47,12 +47,12 @@ pub mod display {
 
         /// Report screen size
         pub fn size(&mut self) -> (u16, u16) {
-            return termion::terminal_size().unwrap();        
+            return termion::terminal_size().unwrap();
         }
 
         /// Return colors to default
         pub fn reset(&mut self) {
-            write!((*self).terminal, "{}{}", 
+            write!((*self).terminal, "{}{}",
                    color::Fg(color::Reset), color::Bg(color::Reset)).unwrap();
             &self.flush();
         }
@@ -93,6 +93,6 @@ pub mod display {
         screen.write(&title);
 
         // Flush the output (display)
-        screen.flush();
+        screen.reset();
     }
 }
