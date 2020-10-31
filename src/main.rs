@@ -27,7 +27,10 @@ fn main() {
         let mut main = setup.lock().unwrap();
 
         main.clear();
-        display::title(&mut main);
+        display::logo(&mut main);
+        display::border(&mut main);
+        display::title(&mut main, "Rust.Ed");
+        main.home();
     }
 
     // Spawn a thread to keep the border updated
@@ -40,9 +43,9 @@ fn main() {
 
                 // Stop updating the border if the main thread has been killed
                 if main.alive{
-                    display::border(&mut main);
+                    display::time(&mut main);
                     drop(main);
-                    thread::sleep(Duration::from_millis(1000));
+                    thread::sleep(Duration::from_millis(50));
                 } else {
                     break;
                 }
